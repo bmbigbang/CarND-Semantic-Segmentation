@@ -32,8 +32,16 @@ def load_vgg(sess, vgg_path):
     vgg_layer3_out_tensor_name = 'layer3_out:0'
     vgg_layer4_out_tensor_name = 'layer4_out:0'
     vgg_layer7_out_tensor_name = 'layer7_out:0'
+    tf.saved_model.loader.load(sess, [vgg_tag], vgg_path)
+    def_graph = tf.get_default_graph()
+
+    in_tensor = def_graph.get_tensor_by_name(vgg_input_tensor_name)
+    keep_prob = def_graph.get_tensor_by_name(vgg_keep_prob_tensor_name)
+    layer3 = def_graph.get_tensor_by_name(vgg_layer3_out_tensor_name)
+    layer4 = def_graph.get_tensor_by_name(vgg_layer4_out_tensor_name)
+    layer7 = def_graph.get_tensor_by_name(vgg_layer7_out_tensor_name)
     
-    return None, None, None, None, None
+    return in_tensor, keep_prob, layer3, layer4, layer7
 tests.test_load_vgg(load_vgg, tf)
 
 
