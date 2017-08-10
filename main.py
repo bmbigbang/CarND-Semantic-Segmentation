@@ -54,7 +54,40 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     :return: The Tensor for the last layer of output
     """
     # TODO: Implement function
-    return None
+
+    l3_num_outputs = int(vgg_layer3_out.shape[-1])
+    l4_num_outputs = int(vgg_layer4_out.shape[-1])
+    l7_num_outputs = int(vgg_layer7_out.shape[-1])
+
+    l3_ker_size = (4, 4)
+    l3_weights = tf.Variable(tf.truncated_normal([64, 64, 3, num_classes], mean=0, stddev=0.1))
+    l3_biases = tf.Variable(tf.zeros(num_classes))
+    l3_deconv = tf.layers.conv2d_transpose(vgg_layer3_out, num_classes, kernel_size=l3_ker_size, strides=(8, 8),
+                                           padding='valid')
+    l3_keep_prob = tf.Variable(0.5)  # dropout layer
+    l3_relu = tf.nn.relu(tf.matmul(l3_weights, l3_deconv) + l3_biases)
+    l3_dropout = tf.nn.dropout(l3_relu, l3_keep_prob)
+
+    l4_ker_size = (4, 4)
+    l4_weights = tf.Variable(tf.truncated_normal([64, 64, 3, num_classes], mean=0, stddev=0.1))
+    l4_biases = tf.Variable(tf.zeros(num_classes))
+    l4_deconv = tf.layers.conv2d_transpose(vgg_layer4_out, num_classes, kernel_size=l4_ker_size, strides=(4, 4),
+                                           padding='valid')
+    l4_keep_prob = tf.Variable(0.5)  # dropout layer
+    l4_relu = tf.nn.relu(tf.matmul(l4_weights, l4_deconv) + l4_biases)
+    l4_dropout = tf.nn.dropout(l4_relu, l4_keep_prob)
+
+
+    l7_ker_size = (16, 16)
+    l7_weights = tf.Variable(tf.truncated_normal([64, 64, 3, num_classes], mean=0, stddev=0.1))
+    l7_biases = tf.Variable(tf.zeros(num_classes))
+    l7_deconv = tf.layers.conv2d_transpose(vgg_layer7_out, num_classes, kernel_size=l7_ker_size, strides=(1, 1),
+                                           padding='valid')
+    l7_keep_prob = tf.Variable(0.5)  # dropout layer
+    l7_relu = tf.nn.relu(tf.matmul(l7_weights, l7_deconv) + l7_biases)
+    l7_dropout = tf.nn.dropout(l7_relu, l7_keep_prob)
+
+    return l3_dropout + l4_dropout + l7_dropout
 tests.test_layers(layers)
 
 
