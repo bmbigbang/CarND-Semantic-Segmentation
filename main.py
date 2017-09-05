@@ -129,7 +129,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         print(epoch)
         for image, label in get_batches_fn(batch_size):
             _, loss_val = sess.run([train_op, cross_entropy_loss], feed_dict={input_image: image, correct_label: label, keep_prob: 0.5,
-                                                      learning_rate: 0.00226})
+                                                      learning_rate: 0.000926})
         print(loss_val)
 
 tests.test_train_nn(train_nn)
@@ -164,7 +164,7 @@ def run():
         layer_output = layers(layer3_out, layer4_out, layer7_out, num_classes)
 
         epochs = 30
-        batch_size = 18
+        batch_size = 8
 
         learning_rate = tf.placeholder(tf.float32)
         correct_label = tf.placeholder(tf.float32, [None, None, None, num_classes])

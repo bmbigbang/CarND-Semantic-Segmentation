@@ -6,7 +6,7 @@ thouroughly in [Fully Convolutional Networks for Semantic Segmentation](https://
 
 The model achieves better than 90% accuracy for detecting the pixels corresponding to roads
 with the majority of the exceptions relating to lighting, shading or other
- intrusions on the road (marks, cracks etc)
+ artifacts on the road (marks, cracks etc)
 
 ### Setup
 ##### Frameworks and Packages
